@@ -22,7 +22,7 @@ The VirtFusion Blesta Direct Provisioning module is a simple module that can cre
 3. Log in to your admin Blesta account and navigate to
 > Settings > Modules
 
-4. Find the Generic Domains module and click the "Install" button to install it
+4. Find the VirtFusion Blesta Direct Provisioning module and click the "Install" button to install it
 
 5. You're done!
 
