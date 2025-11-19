@@ -1027,20 +1027,13 @@ class VirtfusionDirectProvisioning extends Module
         }
 
         // Return all the service fields
-        $fields = ['virtfusion_server_id', 'virtfusion_hostname', 'virtfusion-os_template', 'virtfusion_password', 'virtfusion-base_ips', 'additional_num_ips', 'virtfusion_ip'];
-        $encrypted_fields = [];
-        $return = [];
-        foreach ($fields as $field) {
-            if (isset($vars[$field]) || isset($service_fields->{$field})) {
-                $return[] = [
-                    'key' => $field,
-                    'value' => $vars[$field] ?? $service_fields->{$field},
-                    'encrypted' => (in_array($field, $encrypted_fields) ? 1 : 0)
-                ];
-            }
+        $fields = [];
+        $encrypted_fields = ['virtfusion_password'];
+        foreach ($service_fields as $key => $value) {
+            $fields[] = ['key' => $key, 'value' => $value, 'encrypted' => (in_array($key, $encrypted_fields) ? 1 : 0)];
         }
 
-        return $return;
+        return $fields;
     }
 
     /**
