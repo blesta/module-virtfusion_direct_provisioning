@@ -834,6 +834,7 @@ class VirtfusionDirectProvisioning extends Module
                                 'operatingSystemId' => $virtfusion_os_id,
                                 'name' => $server_name,
                                 'hostname' => $domain,
+                                'ipv6' => true
                                 // 'sshKeys' => [ 1 ], // not sure if needed
                                 // 'email' => true // not sure if needed (default false)
                                 ]
