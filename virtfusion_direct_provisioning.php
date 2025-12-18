@@ -673,13 +673,6 @@ class VirtfusionDirectProvisioning extends Module
         $virtfusion_additional_ips = '';
         $virtfusion_ipv6_cidr = '';
 
-        // validate hostname
-        $is_valid = $this->validateHostname($domain);
-        if (!$is_valid) {
-            $this->Input->setErrors(['Hostname' => ['response' => Language::_('VirtfusionDirectProvisioning.client.!error.host.valid', true)]]);
-            return;
-        }
-
         foreach ($checkbox_fields as $checkbox_field) {
             if (!isset($vars[$checkbox_field])) {
                 $vars[$checkbox_field] = 'false';
@@ -995,16 +988,6 @@ class VirtfusionDirectProvisioning extends Module
 
         // Only update the service if 'use_module' is true
         if ($vars['use_module'] == 'true') {
-            /**  */
-
-            if (isset($vars['virtfusion_hostname'])) {
-                $is_valid = $this->validateHostname($vars['virtfusion_hostname']);
-                if (!$is_valid) {
-                    $this->Input->setErrors(['Hostname' => ['response' => Language::_('VirtfusionDirectProvisioning.client.!error.host.valid', true)]]);
-                    return;
-                }
-            }
-
             // we need the api
             if ($module_row = $this->getModuleRow()) {
                 $data = $this->adjustIpAddresses($module_row, $service_fields, $vars);
@@ -1260,6 +1243,12 @@ class VirtfusionDirectProvisioning extends Module
     {
         // Validate the service fields
         $rules = [
+            'virtfusion_hostname' => [
+                'valid' => [
+                    'rule' => [[$this, 'validateHostname']],
+                    'message' => Language::_('VirtfusionDirectProvisioning.client.!error.host.valid', true)
+                ]
+            ],
             'virtfusion_server_id' => [
                 'valid' => [
                     'if_set' => $edit,
@@ -2254,7 +2243,7 @@ class VirtfusionDirectProvisioning extends Module
      * @param string $host_name The host name to validate
      * @return bool True if the hostname is valid, false otherwise
      */
-    private function validateHostname($host_name) {
+    public function validateHostname($host_name) {
         if (strlen($host_name) > 255) {
             return false;
         }
