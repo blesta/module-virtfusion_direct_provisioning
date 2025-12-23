@@ -1005,14 +1005,14 @@ class VirtfusionDirectProvisioning extends Module
                     return;
                 }
 
-                // reset service_fields
-                $service_fields->{'additional_num_ips'} = $data['service_fields']->{'additional_num_ips'};
+                // reset vars with new information
+                $vars['additional_num_ips'] = $data['service_fields']->{'additional_num_ips'};
             }
         }
 
         // Return all the service fields
         $fields = ['virtfusion_server_id', 'virtfusion_hostname', 'virtfusion-os_template', 'virtfusion_password', 'virtfusion-base_ips', 'additional_num_ips', 'virtfusion_ip'];
-        $encrypted_fields = [];
+        $encrypted_fields = ['virtfusion_password'];
         $return = [];
         foreach ($fields as $field) {
             if (isset($vars[$field]) || isset($service_fields->{$field})) {
