@@ -990,28 +990,7 @@ class VirtfusionDirectProvisioning extends Module
         if ($vars['use_module'] == 'true') {
             // we need the api
             if ($module_row = $this->getModuleRow()) {
-                 $api = $this->getApi($module_row->meta->api_token, $module_row->meta->hostname);
-                $api->loadCommand('virtfusion_server');
-                $server_api = new VirtfusionServer($api);
-
-                // get server
-                $vf_server_request = $server_api->get( $service_fields->virtfusion_server_id );
-                $vf_server_data = json_decode($vf_server_request['response'] ?? []);
-                
-                // get pkg
-                $vf_pkg_request = $server_api->getPkg( $package->meta->package_id );
-                $vf_pkg_data = json_decode($vf_pkg_request['response'] ?? []);
-
-
-                $current_traffic = (int)($vf_server_data->data->settings->resources->traffic ?? 0);
-                $package_traffic = (int)($vf_pkg_data->data->traffic);
-                $additional_traffic = (int)($vars['configoptions']['additional_bandwidth'] ?? 0);
-
-                // this hasent been tested with active endpoint.
-                if ($current_traffic -$package_traffic !== $additional_traffic) {
-                    $new_traffic = $current_traffic + $additional_traffic;
-                    $mod_traffic_res = $server_api->modifyPrimaryTraffic( $service_fields->virtfusion_server_id, [ 'traffic' => $new_traffic ] );
-                }
+                $this->updateTraffic($module_row, $service_fields, $package, $vars['configoptions']['additional_bandwidth']);
                 
                 $data = $this->adjustIpAddresses($module_row, $service_fields, $vars);
 
@@ -1378,6 +1357,18 @@ class VirtfusionDirectProvisioning extends Module
                         return null;
                     }
 
+                    $vf_pkg_request = $server_api->getPkg( $package_from->meta->package_id );
+                    $vf_pkg_data_from = json_decode($vf_pkg_request['response'] ?? []);
+
+                    $package_traffic_from = (int)($vf_pkg_data_from->data->traffic);
+                    $current_traffic = (int)($server_data->data->settings->resources->traffic ?? 0);
+
+                    if ($current_traffic > $package_traffic_from) {
+                        // git diff, rest handled in update traffic
+                        $additional_traffic = $current_traffic - $package_traffic_from;
+                        $this->updateTraffic($row, $service_fields, $package_to, $additional_traffic);
+                    }
+                    
                     // auto reboot
                     $restart_data = $server_api->powerAction($server_id, 'restart');
                     $this->log($row->meta->hostname . '| client restart server', serialize($restart_data), "output", $restart_data['info']['http_code'] == 200);
@@ -1861,6 +1852,38 @@ class VirtfusionDirectProvisioning extends Module
         }
 
         return $view_ready;
+    }
+
+    private function updateTraffic($module_row, $service_fields, $package, $additional_traffic)
+    {
+        $api = $this->getApi($module_row->meta->api_token, $module_row->meta->hostname);
+        $api->loadCommand('virtfusion_server');
+        $server_api = new VirtfusionServer($api);
+
+        // get server
+        $vf_server_request = $server_api->get( $service_fields->virtfusion_server_id );
+        $vf_server_data = json_decode($vf_server_request['response'] ?? []);
+        
+        // get pkg
+        $vf_pkg_request = $server_api->getPkg( $package->meta->package_id );
+        $vf_pkg_data = json_decode($vf_pkg_request['response'] ?? []);
+
+
+        $current_traffic = (int)($vf_server_data->data->settings->resources->traffic ?? 0);
+        $package_traffic = (int)($vf_pkg_data->data->traffic);
+        $additional_traffic = (int)($additional_traffic ?? 0);
+
+        $response = null;
+        // reset if going down to zero
+        if ($additional_traffic == 0 && $current_traffic - $package_traffic !== $additional_traffic) {
+            $response = $server_api->modifyPrimaryTraffic( $service_fields->virtfusion_server_id, [ 'traffic' => $package_traffic ] );
+        } else if ($current_traffic - $package_traffic !== $additional_traffic) {
+            // do package traffic + additional so we dont have to worry about plus/minus
+            $new_traffic = $package_traffic + $additional_traffic;
+            $response = $server_api->modifyPrimaryTraffic( $service_fields->virtfusion_server_id, [ 'traffic' => $new_traffic ] );
+        }
+
+        return $response;
     }
 
     /**
