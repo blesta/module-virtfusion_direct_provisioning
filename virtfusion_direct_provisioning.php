@@ -990,6 +990,29 @@ class VirtfusionDirectProvisioning extends Module
         if ($vars['use_module'] == 'true') {
             // we need the api
             if ($module_row = $this->getModuleRow()) {
+                 $api = $this->getApi($module_row->meta->api_token, $module_row->meta->hostname);
+                $api->loadCommand('virtfusion_server');
+                $server_api = new VirtfusionServer($api);
+
+                // get server
+                $vf_server_request = $server_api->get( $service_fields->virtfusion_server_id );
+                $vf_server_data = json_decode($vf_server_request['response'] ?? []);
+                
+                // get pkg
+                $vf_pkg_request = $server_api->getPkg( $package->meta->package_id );
+                $vf_pkg_data = json_decode($vf_pkg_request['response'] ?? []);
+
+
+                $current_traffic = (int)($vf_server_data->data->settings->resources->traffic ?? 0);
+                $package_traffic = (int)($vf_pkg_data->data->traffic);
+                $additional_traffic = (int)($vars['configoptions']['additional_bandwidth'] ?? 0);
+
+                // this hasent been tested with active endpoint.
+                if ($current_traffic -$package_traffic !== $additional_traffic) {
+                    $new_traffic = $current_traffic + $additional_traffic;
+                    $mod_traffic_res = $server_api->modifyPrimaryTraffic( $service_fields->virtfusion_server_id, [ 'traffic' => $new_traffic ] );
+                }
+                
                 $data = $this->adjustIpAddresses($module_row, $service_fields, $vars);
 
                 if (!empty($data['errors']['err_msg'])) {
