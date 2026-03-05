@@ -1,14 +1,11 @@
 <?php /** @var View $this **/ ?>
 
 <div id="tabAdminManage">
-    <?php
-
-         $this->Form->create(
- //// $this->base_uri . 'services/manage/' . (isset($service_id) ? $service_id : null) . '/tabAdminManage/'
+    <?php $this->Form->create(
+        //// $this->base_uri . 'services/manage/' . (isset($service_id) ? $service_id : null) . '/tabAdminManage/'
         '',
-        array('target' => '_blank')
-         );
-         ?>
+        ['target' => '_blank'],
+    ); ?>
     <div class="col-md-12">
         <input type="hidden" name="action" value="manage" />
         <div class="mt-1">
@@ -17,7 +14,5 @@
             </button>
         </div>
     </div>
-    <?php
-         $this->Form->end();
-         ?>
+    <?php $this->Form->end(); ?>
 </div>
