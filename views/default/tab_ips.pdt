@@ -75,7 +75,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Handle confirmation
         console.log('<?php echo $this->base_uri; ?>')
-        $('#vf_ip-table a.manage[rel]').blestaModalConfirm({
+        blestaModalConfirm('#vf_ip-table a.manage[rel]', {
             base_url: '<?php echo $this->base_uri; ?>',
             close: '<?php $this->_('
             AppController.modal.text_close '); ?>',
