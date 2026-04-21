@@ -1,0 +1,130 @@
+{
+    "id": 1,
+    "name": "VirtFusion Configurable Options",
+    "description": "Configurable options for VirtFusion Direct Provisioning VPS hosting",
+    "hidden": 0,
+    "hide_options": 0,
+    "options": [
+        {
+            "id": 1,
+            "label": "Hypervisor Group",
+            "name": "dynamic_hypervisor_group_id",
+            "description": "Override the hypervisor group for server placement",
+            "type": "text",
+            "addable": 1,
+            "editable": 1,
+            "hidden": 0,
+            "disable_pricing": 1,
+            "hide_on_invoice": 1,
+            "values": [
+                {
+                    "id": 1,
+                    "name": "",
+                    "value": "",
+                    "default": 0,
+                    "status": "active",
+                    "order": 0,
+                    "min": null,
+                    "max": null,
+                    "step": null,
+                    "image": null,
+                    "pricing": [
+                        {
+                            "id": 1,
+                            "term": 1,
+                            "period": "month",
+                            "price": "0.0000",
+                            "price_renews": "0.0000",
+                            "price_transfer": null,
+                            "setup_fee": "0.0000",
+                            "cancel_fee": "0.0000",
+                            "currency": "USD",
+                            "precision": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "label": "Additional IPs",
+            "name": "additional_num_ips",
+            "description": "Number of additional IPv4 addresses to allocate beyond the package default",
+            "type": "quantity",
+            "addable": 1,
+            "editable": 1,
+            "hidden": 0,
+            "disable_pricing": 1,
+            "hide_on_invoice": 1,
+            "values": [
+                {
+                    "id": 2,
+                    "name": "",
+                    "value": "",
+                    "default": 0,
+                    "status": "active",
+                    "order": 0,
+                    "min": 0,
+                    "max": null,
+                    "step": 1,
+                    "image": null,
+                    "pricing": [
+                        {
+                            "id": 2,
+                            "term": 1,
+                            "period": "month",
+                            "price": "0.0000",
+                            "price_renews": "0.0000",
+                            "price_transfer": null,
+                            "setup_fee": "0.0000",
+                            "cancel_fee": "0.0000",
+                            "currency": "USD",
+                            "precision": 2
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "label": "OS Template",
+            "name": "virtfusion-os_template",
+            "description": "Override the OS template ID used to build the server",
+            "type": "text",
+            "addable": 1,
+            "editable": 1,
+            "hidden": 0,
+            "disable_pricing": 1,
+            "hide_on_invoice": 1,
+            "values": [
+                {
+                    "id": 3,
+                    "name": "",
+                    "value": "",
+                    "default": 0,
+                    "status": "active",
+                    "order": 0,
+                    "min": null,
+                    "max": null,
+                    "step": null,
+                    "image": null,
+                    "pricing": [
+                        {
+                            "id": 3,
+                            "term": 1,
+                            "period": "month",
+                            "price": "0.0000",
+                            "price_renews": "0.0000",
+                            "price_transfer": null,
+                            "setup_fee": "0.0000",
+                            "cancel_fee": "0.0000",
+                            "currency": "USD",
+                            "precision": 2
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "condition_sets": []
+}
