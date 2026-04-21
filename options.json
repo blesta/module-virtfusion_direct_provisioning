@@ -60,7 +60,7 @@
                 {
                     "id": 2,
                     "name": "Additional IPs",
-                    "value": "",
+                    "value": null,
                     "default": 0,
                     "status": "active",
                     "order": 0,
