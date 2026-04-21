@@ -59,7 +59,7 @@
             "values": [
                 {
                     "id": 2,
-                    "name": "",
+                    "name": "Additional IPs",
                     "value": "",
                     "default": 0,
                     "status": "active",
