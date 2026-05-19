@@ -73,3 +73,6 @@ If dynamic hypervisor group is not set,
 it will use defualt from that package module option
 
 ***Package option **Type** has only been tested with dropwdown!***
+
+### Reselling bandwidth
+The traffic (bandwidth) management feature requires VirtFusion version 6 or later.

@@ -34,6 +34,16 @@ class VirtfusionServer
         return $this->api->submit('servers/' . $serverId . '/build', 'POST', $vars);
     }
 
+    public function get($serverId)
+    {
+        return $this->api->submit('servers/' . $serverId , 'GET');
+    }
+
+    public function getPkg($pkgId){
+
+        return $this->api->submit('packages/' . $pkgId, 'GET');
+    }
+
     public function changePkg($serverId, $pkgId, array $vars = [])
     {
         return $this->api->submit('servers/' . $serverId . '/package/' . $pkgId, 'PUT', $vars);
@@ -47,6 +57,14 @@ class VirtfusionServer
     public function fetchToken($serverId, $clientId, array $vars)
     {
         return $this->api->submit('users/' . $clientId . '/serverAuthenticationTokens/' . $serverId, 'POST', $vars);
+    }
+    
+    public function modifyPrimaryTraffic($serverId, array $vars) {
+        return $this->api->submit('servers/' . $serverId . '/modify/traffic', 'PUT', $vars);
+    }
+    
+    public function getTraffic($serverId) {
+        return $this->api->submit('servers/' . $serverId . '/traffic', 'GET');
     }
 
     public function addIpv4Qty($serverId, $qty, $interface = 'primary')
