@@ -2171,7 +2171,7 @@ class VirtfusionDirectProvisioning extends Module
                 $fields->fieldMultiSelect(
                     'virtfusion_extra_ip_to_remove[]',
                     $extra_ips,
-                    [],
+                    ($vars->virtfusion_extra_ip_to_remove ?? []),
                     ['id' => 'virtfusion_extra_ip_to_remove', 'class' => 'form-select']
                 )
             );
